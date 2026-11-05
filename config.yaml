@@ -1,0 +1,36 @@
+# paper — бумажная торговля (виртуальные деньги, реальные цены); live — реальные ордера
+mode: paper
+exchange: binance
+symbols: [BTC/USDT, ETH/USDT, SOL/USDT]
+timeframe: 4h
+history_bars: 300          # сколько свечей загружать для анализа
+loop_interval_minutes: 30  # как часто бот просыпается
+
+strategy:
+  ema_fast: 20
+  ema_slow: 50
+  ema_trend: 200
+  rsi_period: 14
+  rsi_min: 40
+  rsi_max: 65
+  atr_period: 14
+  stop_atr_mult: 2.0       # стоп = вход - 2 * ATR
+  reward_risk: 2.5         # тейк = вход + 2.5 * риск
+
+risk:
+  risk_per_trade: 0.01         # риск 1% капитала на сделку
+  max_position_pct: 0.30       # одна позиция не больше 30% капитала
+  max_open_positions: 3
+  max_daily_loss: 0.03         # -3% за день — торговля останавливается до завтра
+  max_consecutive_losses: 4    # после 4 убытков подряд — пауза
+  pause_hours_after_losses: 48
+
+paper:
+  starting_balance: 1000
+  fee: 0.001
+  slippage: 0.0005
+
+llm:
+  enabled: true              # без ключа LLM_API_KEY бот работает только по правилам
+  min_confidence: 0.6        # ниже — сделку пропускаем
+  timeout_seconds: 90
