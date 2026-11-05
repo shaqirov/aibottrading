@@ -32,5 +32,31 @@ paper:
 
 llm:
   enabled: true              # без ключа LLM_API_KEY бот работает только по правилам
-  min_confidence: 0.6        # ниже — сделку пропускаем
+  min_confidence: 0.6        # решения ИИ с меньшей уверенностью игнорируются
   timeout_seconds: 90
+  max_tokens: 1000
+
+  # 1. проверка сигналов правил — включена всегда, когда ИИ активен
+
+  # 2. сопровождение открытых позиций: раз в 4h-свечу ИИ решает держать / подтянуть стоп / закрыть
+  manage_positions: true
+
+  # 3. режим рынка: раз в сутки оценка по BTC и новостям -> множитель риска 0..1
+  regime: true
+  regime_symbol: BTC/USDT
+  regime_every_hours: 24
+
+  # 4. ИИ сам ищет сделки, когда правила молчат
+  scanner: true
+  scan_every_hours: 12           # не чаще раза в 12 ч на монету
+  scanner_min_rr: 2.0            # минимальное соотношение прибыль/риск для идеи ИИ
+  scanner_risk_multiplier: 0.5   # идеи ИИ не проверены бэктестом — торгуем половинным риском
+
+news:
+  enabled: true
+  max_items: 10
+  max_age_hours: 48
+  cryptopanic_url: https://cryptopanic.com/api/developer/v2/posts/
+  rss_feeds:
+    - https://www.coindesk.com/arc/outboundfeeds/rss/
+    - https://cointelegraph.com/rss

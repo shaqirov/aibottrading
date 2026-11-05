@@ -20,6 +20,7 @@ def load_config(path: str | Path = ROOT / "config.yaml") -> dict:
         "llm_model": os.getenv("LLM_MODEL", ""),
         "tg_token": os.getenv("TELEGRAM_BOT_TOKEN", ""),
         "tg_chat": os.getenv("TELEGRAM_CHAT_ID", ""),
+        "cryptopanic_token": os.getenv("CRYPTOPANIC_TOKEN", ""),
     }
     DATA_DIR.mkdir(exist_ok=True)
     return cfg

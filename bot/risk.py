@@ -2,12 +2,17 @@
 from datetime import datetime, timedelta, timezone
 
 
-def position_size(equity: float, cash: float, entry: float, stop: float, r: dict) -> float:
-    """Количество монет так, чтобы при срабатывании стопа потерять risk_per_trade капитала."""
+def position_size(equity: float, cash: float, entry: float, stop: float, r: dict,
+                  multiplier: float = 1.0) -> float:
+    """Количество монет так, чтобы при срабатывании стопа потерять risk_per_trade капитала.
+
+    multiplier (0..1) уменьшает риск: режим рынка, сделки по идее ИИ и т.п. Увеличить нельзя.
+    """
     per_unit = entry - stop
-    if per_unit <= 0 or entry <= 0:
+    multiplier = max(0.0, min(1.0, multiplier))
+    if per_unit <= 0 or entry <= 0 or multiplier == 0:
         return 0.0
-    qty = equity * r["risk_per_trade"] / per_unit
+    qty = equity * r["risk_per_trade"] * multiplier / per_unit
     qty = min(qty, equity * r["max_position_pct"] / entry, cash * 0.98 / entry)
     return max(qty, 0.0)
 
