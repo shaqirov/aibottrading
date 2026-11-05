@@ -1,0 +1,22 @@
+[Unit]
+Description=AI trading bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aibot
+WorkingDirectory=/opt/aibottrading
+ExecStart=/opt/aibottrading/.venv/bin/python -m bot run
+Restart=always
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+# защита: бот может писать только в свою папку data/
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/aibottrading/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

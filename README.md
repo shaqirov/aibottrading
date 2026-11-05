@@ -66,6 +66,30 @@ python -m bot run                   # постоянная работа (луч�
 По умолчанию `mode: paper` — виртуальный баланс 1000 USDT и реальные цены.
 Состояние хранится в `data/paper_state.json`.
 
+## Запуск на VPS
+
+Нужен сервер с Ubuntu 22.04/24.04 или Debian 12 (1 ядро, 1 ГБ RAM достаточно).
+
+```bash
+git clone https://github.com/shaqirov/aibottrading ~/aibottrading
+cd ~/aibottrading && sudo bash deploy/install.sh
+sudo nano /opt/aibottrading/.env      # ключи
+sudo systemctl start aibot
+```
+
+Бот работает как сервис systemd: сам стартует после перезагрузки и перезапускается при сбое.
+
+| Действие | Команда |
+|---|---|
+| логи в реальном времени | `sudo journalctl -u aibot -f` |
+| статус | `sudo systemctl status aibot` |
+| остановить / запустить | `sudo systemctl stop aibot` / `sudo systemctl start aibot` |
+| журнал сделок | `cat /opt/aibottrading/data/journal.csv` |
+| обновить | `cd ~/aibottrading && git pull && sudo bash deploy/install.sh` |
+
+Настройки (`config.yaml`) меняйте в `~/aibottrading` и применяйте командой обновления.
+Ключи (`/opt/aibottrading/.env`) и история (`/opt/aibottrading/data/`) при обновлении сохраняются.
+
 ## Переход на реальные деньги
 
 1. Минимум 1–3 месяца в режиме `paper` с положительным результатом.
